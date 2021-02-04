@@ -1,0 +1,37 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %}{{user_other.user_profile.full_name}} (@{{user_other.username}}) {% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-4">
+        {% if user_other.user_profile.profile_pic %}
+        <img src="/media/{{user_other.user_profile.profile_pic}}" width="250px" height="250px" class="rounded-circle">
+        {% else %}
+        <img src="/media/profile.jpg" width="250px" height="250px" class="rounded-circle">
+        {% endif %}
+    </div>
+    <div class="col-sm-8 mt-5">
+        <h4>{{user_other.username}} &nbsp;
+        {% if not already_followed %}
+        <a href="{% url 'App_Login:follow' username=user_other.username %}" class="btn btn-primary">Follow</a>
+        {% else %}
+        <a href="{% url 'App_Login:unfollow' username=user_other.username %}" class="btn btn-primary">Unfollow</a>
+        {% endif %}
+        </h4>
+        <br>
+        <h5>{{user_other.post.count}} Posts &nbsp;&nbsp; {{user_other.following.count}} Following &nbsp;&nbsp; {{user_other.follower.count}} Follower &nbsp;&nbsp;</h5>
+        <h5>Full Name: {{user_other.user_profile.full_name}}</h5>
+        <h6>Description: {{user_other.user_profile.description|linebreaks}}</h6>
+    </div>
+</div>
+<hr>
+<br>
+<br>
+<div class="row">
+    {% for post in user_other.post.all %}
+        <div class="crop" style="width: 200px; height: 200px; overflow: hidden;">
+            <img src="/media/{{post.image}}" style="width: 400px; height: 300px; margin: -75px 0 0 -100px; margin: 10px 10px ;">
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}
